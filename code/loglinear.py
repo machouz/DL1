@@ -1,4 +1,5 @@
 import numpy as np
+from utils import *
 
 STUDENT = {'name': 'YOUR NAME',
            'ID': 'YOUR ID NUMBER'}
@@ -21,7 +22,7 @@ def classifier_output(x, params):
     of a log-linear classifier with given params on input x.
     """
     W, b = params
-    probs = W.dot(x) + b
+    probs = softmax(W.dot(x) + b)
     return probs
 
 
@@ -52,7 +53,10 @@ def loss_and_gradients(x, y, params):
     W, b = params
     y_pred = classifier_output(x, params)
     loss = -np.log(y_pred[y])
-    gW =
+
+    y_one_hot = one_hot_vector(y_pred)
+    gW = np.outer(y_pred - y_one_hot, x)
+    gB = y_pred - y_one_hot
     return loss, [gW, gb]
 
 
