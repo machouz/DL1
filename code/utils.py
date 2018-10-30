@@ -1,6 +1,8 @@
 # This file provides code which you may or may not find helpful.
 # Use it if you want, or ignore it.
 import random
+import numpy as np 
+
 def read_data(fname):
     data = []
     for line in file(fname):
@@ -11,8 +13,8 @@ def read_data(fname):
 def text_to_bigrams(text):
     return ["%s%s" % (c1,c2) for c1,c2 in zip(text,text[1:])]
 
-def one_hot_vector(vec):
-    out = np.zeros(len(vec))
+def one_hot_vector(vec, length):
+    out = np.zeros(length)
     out[vec] = 1
     return out
 
