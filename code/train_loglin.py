@@ -3,38 +3,37 @@ import random
 import numpy as np
 from utils import *
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'YOUR NAME',
+           'ID': 'YOUR ID NUMBER'}
 
-VOCAB_SIZE = len(vocab)
+VOCAB_SIZE = len(vocab) + 1
 CATEGORIES = len(L2I)
 num_iterations = 10
 learning_rate = 0.01
 
+
 def feats_to_vec(features):
     vec = np.zeros(VOCAB_SIZE)
-    features = map(F2I.get, features)
     for feature in features:
-        if feature != None:
-            vec[feature] += 1
-
+        if feature in F2I:  # check that the feature is in the dictionary
+            vec[F2I[feature]] += 1  # increment the index of the feature by 1
     # Should return a numpy vector of features.
     return vec
 
+
 def accuracy_on_dataset(dataset, params):
-    good = bad = 0.0
+    good = total = 0.0
     for label, features in dataset:
-        x = feats_to_vec(features)
-        y_pred = ll.predict(x, params)
-        if y_pred == L2I.get(label):
+        x = feats_to_vec(features)  # convert features to a vector.
+        y = L2I.get(label)  # convert the label to number if needed.
+        if ll.predict(x, params) == y:  # compare the prediction and the correct label
             good += 1
-        else:
-            bad += 1
-        # YOUR CODE HERE
+        total += 1
         # Compute the accuracy (a scalar) of the current parameters
         # on the dataset.
         # accuracy is (correct_predictions / all_predictions)
-    return good / (good + bad)
+    return good / total
+
 
 def train_classifier(train_data, dev_data, num_iterations, learning_rate, params):
     """
@@ -48,18 +47,15 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
     """
     W, b = params
     for I in xrange(num_iterations):
-        cum_loss = 0.0 # total loss in this iteration.
+        cum_loss = 0.0  # total loss in this iteration.
         random.shuffle(train_data)
         for label, features in train_data:
-            x = feats_to_vec(features) # convert features to a vector.
-            y = L2I.get(label)                  # convert the label to number if needed.
-            loss, grads = ll.loss_and_gradients(x,y,params)
+            x = feats_to_vec(features)  # convert features to a vector.
+            y = L2I.get(label)  # convert the label to number if needed.
+            loss, (gW, gB) = ll.loss_and_gradients(x, y, params)
             cum_loss += loss
-            gW, gB = grads
             W -= learning_rate * gW
             b -= learning_rate * gB
-
-            # YOUR CODE HERE
             # update the parameters according to the gradients
             # and the learning rate.
 
@@ -69,16 +65,15 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         print I, train_loss, train_accuracy, dev_accuracy
     return params
 
+
 if __name__ == '__main__':
     # YOUR CODE HERE
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
-    
+
     # ...
     in_dim = VOCAB_SIZE
     out_dim = CATEGORIES
-   
 
     params = ll.create_classifier(in_dim, out_dim)
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
-

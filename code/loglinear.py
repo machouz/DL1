@@ -6,14 +6,15 @@ STUDENT = {'name': 'YOUR NAME',
 
 CATEGORIES = len(L2I)
 
+
 def softmax(x):
     """
     Compute the softmax vector.
     x: a n-dim vector (numpy array)
     returns: an n-dim vector (numpy array) of softmax values
     """
-    shiftx = x - np.max(x)
-    exps = np.exp(shiftx)
+    x -= np.max(x)
+    exps = np.exp(x)
     return exps / np.sum(exps)
 
 
@@ -24,7 +25,7 @@ def classifier_output(x, params):
     """
 
     W, b = params
-    probs = softmax(np.dot(x, W) + b)
+    probs = softmax(x.dot(W) + b)
     return probs
 
 
@@ -52,11 +53,10 @@ def loss_and_gradients(x, y, params):
     gW: matrix, gradients of W
     gb: vector, gradients of b
     """
-    W, b = params
-    y_pred = classifier_output(x, params)
-    loss = -np.log(y_pred[y])
+    y_pred = classifier_output(x, params)  # y_pred: the prediction
+    loss = -np.log(y_pred[y])  # log of the probability predicted to the correct class
 
-    y_one_hot = one_hot_vector(y, CATEGORIES)
+    y_one_hot = one_hot_vector(y, CATEGORIES)  # vector of zeros with one at the correct index
     gW = np.outer(x, y_pred - y_one_hot)
     gb = y_pred - y_one_hot
     return loss, [gW, gb]
@@ -68,17 +68,13 @@ def create_classifier(in_dim, out_dim):
     with input dimension in_dim and output dimension out_dim.
     """
 
-    #eps = np.sqrt(6.0 / (in_dim + out_dim))
-    shape = (in_dim, out_dim)
-    W = np.random.uniform(-1, 1, shape)
-    b = np.random.uniform(-1, 1, out_dim)
+    # eps = np.sqrt(6.0 / (in_dim + out_dim))
+    W = np.zeros((in_dim, out_dim))
+    b = np.zeros(out_dim)
     return [W, b]
 
 
 if __name__ == '__main__':
-
-
-
     # Sanity checks for softmax. If these fail, your softmax is definitely wrong.
     # If these pass, it may or may not be correct.
     test1 = softmax(np.array([1, 2]))
