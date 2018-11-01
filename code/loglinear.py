@@ -25,7 +25,7 @@ def classifier_output(x, params):
     """
 
     W, b = params
-    probs = softmax(x.dot(W) + b)
+    probs = softmax(np.dot(x, W) + b)
     return probs
 
 
@@ -55,8 +55,8 @@ def loss_and_gradients(x, y, params):
     """
     y_pred = classifier_output(x, params)  # y_pred: the prediction
     loss = -np.log(y_pred[y])  # log of the probability predicted to the correct class
-
-    y_one_hot = one_hot_vector(y, CATEGORIES)  # vector of zeros with one at the correct index
+    W, b = params
+    y_one_hot = one_hot_vector(y, len(b))  # vector of zeros with one at the correct index
     gW = np.outer(x, y_pred - y_one_hot)
     gb = y_pred - y_one_hot
     return loss, [gW, gb]
@@ -89,7 +89,6 @@ if __name__ == '__main__':
     print test3
     assert np.amax(np.fabs(test3 - np.array([0.73105858, 0.26894142]))) <= 1e-6
 
-    '''
     # Sanity checks. If these fail, your gradient calculation is definitely wrong.
     # If they pass, it is likely, but not certainly, correct.
     from grad_check import gradient_check
@@ -98,13 +97,13 @@ if __name__ == '__main__':
 
 
     def _loss_and_W_grad(W):
-        global W
+        global b
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b])
         return loss, grads[0]
 
 
     def _loss_and_b_grad(b):
-        global b
+        global W
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b])
         return loss, grads[1]
 
@@ -114,5 +113,3 @@ if __name__ == '__main__':
         b = np.random.randn(b.shape[0])
         gradient_check(_loss_and_b_grad, b)
         gradient_check(_loss_and_W_grad, W)
-        
-    '''
