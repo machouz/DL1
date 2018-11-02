@@ -23,7 +23,7 @@ def gradient_check(f, x):
         x[ix] = oldval - h
         fxmh, _ = f(x)
         x[ix] = oldval
-        numeric_gradient = (fxph - fxmh) / (2 * h)  
+        numeric_gradient = (fxph - fxmh) / (2 * h)
         # Compare gradients
         reldiff = abs(numeric_gradient - grad[ix]) / max(1, abs(numeric_gradient), abs(grad[ix]))
         if reldiff > 1e-5:
