@@ -8,7 +8,7 @@ STUDENT = {'name': 'YOUR NAME',
 
 VOCAB_SIZE = len(vocab) + 1
 CATEGORIES = len(L2I)
-num_iterations = 10
+num_iterations = 30
 learning_rate = 0.01
 
 

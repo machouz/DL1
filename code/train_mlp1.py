@@ -6,10 +6,10 @@ from utils import *
 STUDENT = {'name': 'YOUR NAME',
            'ID': 'YOUR ID NUMBER'}
 
-VOCAB_SIZE = len(vocab) + 1
+VOCAB_SIZE = len(vocab)
 CATEGORIES = len(L2I)
-num_iterations = 10
-learning_rate = 0.01
+num_iterations = 30
+learning_rate = 0.001
 
 
 def feats_to_vec(features):
@@ -54,7 +54,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             y = L2I.get(label)  # convert the label to number if needed.
             loss, [gW, gb, gU, gb_tag] = ll.loss_and_gradients(x, y, params)
             cum_loss += loss
-            W -= learning_rate * gW.T
+            W -= learning_rate * gW
             b -= learning_rate * gb
             U -= learning_rate * gU
             b_tag -= learning_rate * gb_tag

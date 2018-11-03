@@ -68,7 +68,6 @@ def create_classifier(in_dim, out_dim):
     with input dimension in_dim and output dimension out_dim.
     """
 
-    # eps = np.sqrt(6.0 / (in_dim + out_dim))
     W = np.zeros((in_dim, out_dim))
     b = np.zeros(out_dim)
     return [W, b]
