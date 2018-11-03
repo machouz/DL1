@@ -1,7 +1,7 @@
 import numpy as np
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'cattana_',
+         'ID': '336319314_F957022'}
 
 def classifier_output(x, params):
     # YOUR CODE HERE.

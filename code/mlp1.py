@@ -25,14 +25,14 @@ def classifier_output(x, params):
     hidden_output = x.dot(W) + b
     z = hidden_output.dot(U) + b_tag
     probs = softmax(z)
-    return probs, hidden_output
+    return probs
 
 
 def predict(x, params):
     """
     params: a list of the form [W, b, U, b_tag]
     """
-    probs, _ = classifier_output(x, params)
+    probs = classifier_output(x, params)
     return np.argmax(probs)
 
 
@@ -47,9 +47,12 @@ def loss_and_gradients(x, y, params):
     gW: matrix, gradients of W
     gb: vector, gradients of b
     """
-    y_pred, hidden_output = classifier_output(x, params)  # y_pred:the prediction
+
+
+    y_pred = classifier_output(x, params)  # y_pred:the prediction
     loss = -np.log(y_pred[y])  # log of the probability predicted to the correct class
     [W, b, U, b_tag] = params
+    hidden_output = x.dot(W) + b
     y_one_hot = one_hot_vector(y, len(b_tag))  # vector of zeros with one at the correct index
     gU = np.outer(hidden_output, y_pred - y_one_hot)  # [12:6]
     gb_tag = y_pred - y_one_hot  # [6]
