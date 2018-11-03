@@ -15,6 +15,8 @@ def read_data(fname):
 def text_to_bigrams(text):
     return ["%s%s" % (c1, c2) for c1, c2 in zip(text, text[1:])]
 
+def text_to_unigrams(text):
+    return ["%s" % c for c in text]
 
 def one_hot_vector(vec, length):
     out = np.zeros(length)

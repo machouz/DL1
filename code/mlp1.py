@@ -4,8 +4,6 @@ from utils import *
 STUDENT = {'name': 'YOUR NAME',
            'ID': 'YOUR ID NUMBER'}
 
-CATEGORIES = len(L2I)
-
 
 def softmax(x):
     """
