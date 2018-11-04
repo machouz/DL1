@@ -2,32 +2,32 @@ import numpy as np
 from loglinear import softmax
 from utils import *
 
-STUDENT={'name': 'cattana_',
-         'ID': '336319314_F957022'}
+STUDENT = {'name': 'cattana_uzanmoc',
+           'ID': '336319314_F957022'}
+
 
 def classifier_output(x, params):
-    # YOUR CODE HERE.
     out = x
-    layer_number = len(params)
-    for i in xrange(0, layer_number, 2):
-        hidden = out.dot(params[i]) + params[i + 1]
+    for W, b in zip(params[::2], params[1::2]):
+        hidden = out.dot(W) + b
         out = np.tanh(hidden)
 
     probs = softmax(out)
 
     return probs
 
+
 def predict(x, params):
     return np.argmax(classifier_output(x, params))
+
 
 def hidden_layers(x, params):
     aggregation = []
     activation = [x]
     out = x
 
-    layer_number = len(params)
-    for i in xrange(0, layer_number, 2):
-        aggr = out.dot(params[i]) + params[i + 1]
+    for W, b in zip(params[::2], params[1::2]):
+        aggr = out.dot(W) + b
         out = np.tanh(aggr)
         aggregation.append(aggr)
         activation.append(out)
@@ -35,6 +35,7 @@ def hidden_layers(x, params):
     y_pred = softmax(out)
 
     return y_pred, aggregation, activation
+
 
 def loss_and_gradients(x, y, params):
     """
@@ -58,10 +59,23 @@ def loss_and_gradients(x, y, params):
     y_pred, aggregation, activation = hidden_layers(x, params)
     loss = -np.log(y_pred[y])
     grads = []
-
-
-
+    z = aggregation[-1]
+    dz = z - y_pred  # dL/dz
+    g = dz
+    layer_number = len(params) / 2
+    for i in xrange(layer_number, 0, -1):
+        W = params[2 * (i - 1)]
+        z_prec = aggregation[i - 2]
+        h_prec = activation[i - 1]
+        dW = np.outer(h_prec, g)  # dL/dz(i+1) * dz(i+1)/dh(i) * dh(i)/dz(i) * dz(i)/dw(i) = dw(i)
+        db = g  # dL/dz(i+1) * dz(i+1)/dh(i) * dh(i)/dz(i) * dz(i)/db(i) = db(i)
+        grads.insert(0, db)
+        grads.insert(0, dW)
+        dz = g.dot(W.T)  # dL/dz(i+1) * dz(i+1)/dh(i) * dh(i)/dz(i) = dL/dz(i)
+        if i > 1:
+            g = (1.0 - np.tanh(z_prec) ** 2) * dz
     return loss, grads
+
 
 def create_classifier(dims):
     """
@@ -87,9 +101,9 @@ def create_classifier(dims):
     params = []
 
     for i in xrange(layers_number - 1):
-        eps = np.sqrt(6.0 / (dims[i] + dims[i+1]))
-        W = np.random.uniform(-eps, eps, (dims[i], dims[i+1]))
-        b = np.random.uniform(-eps, eps, dims[i+1])
+        eps = np.sqrt(6.0 / (dims[i] + dims[i + 1]))
+        W = np.random.uniform(-eps, eps, (dims[i], dims[i + 1]))
+        b = np.random.uniform(-eps, eps, dims[i + 1])
         params.append(W)
         params.append(b)
 
