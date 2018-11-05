@@ -1,7 +1,7 @@
 import numpy as np
 
-STUDENT = {'name': 'YOUR NAME',
-           'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'cattana_uzanmoc',
+           'ID': '336319314_F957022'}
 
 
 def gradient_check(f, x):

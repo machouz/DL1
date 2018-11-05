@@ -8,11 +8,12 @@ STUDENT = {'name': 'cattana_uzanmoc',
 
 def classifier_output(x, params):
     out = x
+
     for W, b in zip(params[::2], params[1::2]):
         hidden = out.dot(W) + b
         out = np.tanh(hidden)
 
-    probs = softmax(out)
+    probs = softmax(hidden)
 
     return probs
 
@@ -32,8 +33,8 @@ def hidden_layers(x, params):
         aggregation.append(aggr)
         activation.append(out)
 
-    y_pred = softmax(out)
-
+    y_pred = softmax(aggr)
+    del activation[-1]
     return y_pred, aggregation, activation
 
 
@@ -59,8 +60,10 @@ def loss_and_gradients(x, y, params):
     y_pred, aggregation, activation = hidden_layers(x, params)
     loss = -np.log(y_pred[y])
     grads = []
-    z = aggregation[-1]
-    dz = z - y_pred  # dL/dz
+
+    y_one_hot = one_hot_vector(y, len(y_pred))
+    #z = aggregation[-1]
+    dz = y_pred - y_one_hot # dL/dz
     g = dz
     layer_number = len(params) / 2
     for i in xrange(layer_number, 0, -1):
@@ -111,6 +114,6 @@ def create_classifier(dims):
 
 
 if __name__ == '__main__':
-    params = create_classifier([600, 200, 100, 6])
+    params = create_classifier([600, 100, 6])
     x = np.random.uniform(0, 1, 600)
     y_pred, aggregation, activation = hidden_layers(x, params)

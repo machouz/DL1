@@ -1,15 +1,15 @@
-import mlpn as ll
+import mlpn
 import random
 import numpy as np
 from utils import *
 
-STUDENT = {'name': 'YOUR NAME',
-           'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'cattana_uzanmoc',
+           'ID': '336319314_F957022'}
 
 VOCAB_SIZE = len(vocab)
 CATEGORIES = len(L2I)
-num_iterations = 3000
-learning_rate = 0.0001
+num_iterations = 30
+learning_rate = 0.001
 
 
 def feats_to_vec(features):
@@ -26,7 +26,7 @@ def accuracy_on_dataset(dataset, params):
     for label, features in dataset:
         x = feats_to_vec(features)  # convert features to a vector.
         y = L2I.get(label)  # convert the label to number if needed.
-        if ll.predict(x, params) == y:  # compare the prediction and the correct label
+        if mlpn.predict(x, params) == y:  # compare the prediction and the correct label
             good += 1
         total += 1
         # Compute the accuracy (a scalar) of the current parameters
@@ -51,7 +51,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         for label, features in train_data:
             x = feats_to_vec(features)  # convert features to a vector.
             y = L2I.get(label)  # convert the label to number if needed.
-            loss, gradients = ll.loss_and_gradients(x, y, params)
+            loss, gradients = mlpn.loss_and_gradients(x, y, params)
             cum_loss += loss
             for param, dparam in zip(params, gradients):
                 param -= learning_rate * dparam
@@ -75,5 +75,5 @@ if __name__ == '__main__':
     hidden_dim = CATEGORIES * 2
     out_dim = CATEGORIES
 
-    params = ll.create_classifier([in_dim, hidden_dim, out_dim])
+    params = mlpn.create_classifier([600, 200, 100, 6])
     trained_params = train_classifier(TRAIN, DEV, num_iterations, learning_rate, params)
