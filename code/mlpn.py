@@ -2,7 +2,7 @@ import numpy as np
 from loglinear import softmax
 from utils import *
 
-STUDENT = {'name': 'cattana_uzanmoc',
+STUDENT = {'name': 'Arie Cattan_Moche Uzan',
            'ID': '336319314_F957022'}
 
 

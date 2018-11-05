@@ -26,6 +26,7 @@ def one_hot_vector(vec, length):
 
 TRAIN = [(l, text_to_bigrams(t)) for l, t in read_data("../data/train")]
 DEV = [(l, text_to_bigrams(t)) for l, t in read_data("../data/dev")]
+TEST = [(l, text_to_bigrams(t)) for l, t in read_data("../data/test")]
 
 from collections import Counter
 
@@ -38,5 +39,7 @@ vocab = set([x for x, c in fc.most_common(600)])
 
 # label strings to IDs
 L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in TRAIN]))))}
+# IDs to label strings
+I2L = {i: l for i, l in enumerate(list(sorted(set([l for l, t in TRAIN]))))}
 # feature strings (bigrams) to IDs
 F2I = {f: i for i, f in enumerate(list(sorted(vocab)))}

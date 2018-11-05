@@ -1,6 +1,6 @@
 import numpy as np
 
-STUDENT = {'name': 'cattana_uzanmoc',
+STUDENT = {'name': 'Arie Cattan_Moche Uzan',
            'ID': '336319314_F957022'}
 
 

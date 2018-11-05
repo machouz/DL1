@@ -3,13 +3,13 @@ import random
 import numpy as np
 from utils import *
 
-STUDENT = {'name': 'cattana_uzanmoc',
+STUDENT = {'name': 'Arie Cattan_Moche Uzan',
            'ID': '336319314_F957022'}
 
 VOCAB_SIZE = len(vocab)
 CATEGORIES = len(L2I)
-num_iterations = 30
-learning_rate = 0.01
+num_iterations = 100
+learning_rate = 0.001
 
 
 def feats_to_vec(features):

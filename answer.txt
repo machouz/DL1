@@ -1,0 +1,12 @@
+1. No, we get better accuracy with the log linear classifier.
+Log-linear : 0.86
+MLP1: 0.85
+
+2. Here the best accuracies on the dev set.
+Log-linear : 0.71
+MLP1: 0.7133
+
+Learning rate: 0.0001
+Epochs: 500
+
+3. After 400 iterations, the mlp1 has learned the XOR function.
